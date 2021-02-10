@@ -102,9 +102,8 @@ const LoginPage= () => {
 
     }
         
-    console.log("Token Response", tokenResponse);
-    return (<>
-            
+    
+    return (<>            
         <div className={classes.container}>
            <form onSubmit={handleSubmit} >
             <div style={{padding:15, textAlign:"center"}}>

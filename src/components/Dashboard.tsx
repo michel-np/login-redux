@@ -4,6 +4,7 @@ import {getWidgetsWithToken} from "../providers/widgetsProvider";
 import {useHistory} from "react-router-dom";
 import {Paper,Backdrop, CircularProgress, Button} from "@material-ui/core";
 import {RemoveToken} from "../store/actions/UserActions";
+import {makeStyles} from "@material-ui/styles";
 
 interface Widget {
     id:number;
@@ -28,20 +29,48 @@ interface Widgets {
     }
 }
 
+const useStyles = makeStyles(() => ({
+    navbar: {
+        height:50,
+        display:"flex",
+        justifyContent:"space-between",
+        "& span":{
+            padding:10
+        }
+    },
+    widgetsContainer:{
+        height:"100vh",
+        width:"100vw",
+        display:"flex",
+        justifyContent:"space-evenly",
+        flexWrap:"wrap",
+        backgroundColor:"#020b2e",
+        "& .MuiPaper-root":{
+            width:"20vw",
+            height:"40vh",
+            margin:20,
+            display:"flex",
+            flexDirection:"column",
+            alignItems:"center"
+        }
+    }
+}))
+
 const Dashboard = () => {
+    const classes = useStyles();
     const [widgets, setWidgets] = useState<Widgets>();
     const [loading, setLoading] = useState(false);
-    const token = useSelector((state: RootStateOrAny) => state.user)
+    const tokenState = useSelector((state: RootStateOrAny) => state.user)
     const dispatch = useDispatch();
 
     const history = useHistory();
 
-    console.log(widgets)
+    console.log("Widgets",tokenState)
     useEffect(() => {
         const getWidgets = async () => {
-            if(token.token.data.token){
+            if(tokenState.token && tokenState.token.data.token){
                 setLoading(true)
-                await getWidgetsWithToken(token.token.data.token).then(res => {
+                await getWidgetsWithToken(tokenState.token.data.token).then(res => {
                     setWidgets(res.data)
                 })
                 setLoading(false)
@@ -59,20 +88,18 @@ const Dashboard = () => {
 
 
     return<>
-    <nav style={{height:50, display:"flex", justifyContent:"space-between"}}>
+    <nav className={classes.navbar}>
         <span style={{padding:10}}>Dashboard</span>
         <Button onClick={handleLogout}>SAIR</Button>
         
     </nav>
-    <div style={{height:"100vh", width:"100vw", display:"flex", justifyContent:"space-evenly", flexWrap:"wrap", backgroundColor:"#020b2e"}}>
-    {widgets && widgets.data ? widgets.data.map((widget:Widget) => (
-       <div >
-            <Paper elevation={2} style={{width:"20vw", height:"30vh", margin:20, display:"flex", flexDirection:"column", alignItems:"center"}}>
+    <div className={classes.widgetsContainer}>
+        {widgets && widgets.data ? widgets.data.map((widget:Widget) => (        
+            <Paper elevation={2}>
                 <span style={{marginTop:20}}>{widget.title}</span>
                 <span style={{textAlign:"center", paddingTop:20}}> {widget.description}</span>
-            </Paper>
-       </div>
-    )) : <></>}
+            </Paper>        
+        )) : <></>}
     </div>
     <Backdrop style={{zIndex:9}} open={loading}>
         <CircularProgress/>
