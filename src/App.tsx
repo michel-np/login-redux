@@ -6,11 +6,25 @@ import { GetUserToken  } from "./store/actions/UserActions"
 import {BrowserRouter as Router, Switch , Route} from "react-router-dom"
 import LoginPage from "./components/LoginPage"
 import Dashboard from "./components/Dashboard";
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
+import CssBaseLine from  "@material-ui/core/CssBaseline";
 
+const theme = createMuiTheme({
+  palette:{
+    primary:{
+      main:"#020b2e"
+    },
+    secondary:{
+      main:"#e8e8e8"
+    }
+  }
+})
 
 function App() { 
     return(
-     <Router>
+    <ThemeProvider theme={theme}>
+      <CssBaseLine/>
+      <Router>
        <Switch>
        <Route exact path="/">
           <LoginPage/>
@@ -20,6 +34,7 @@ function App() {
         </Route>
        </Switch>
      </Router>
+    </ThemeProvider>
     );
 }
 

@@ -15,15 +15,22 @@ const useStyles = makeStyles(() => ({
         alignItems:"center",
         height:"100vh", 
         "& form":{
-            width:"30vw",
-            height:"20vw",
-            border:".1px solid",
+            width:"auto",
+            maxWidth:"40vw",
+            height:"auto",
+            border:".1px solid gray",
             borderRadius:5,
-            padding:30,
+            padding:50,
             display:"flex",
             flexDirection:"column",
             "& .MuiTextField-root":{
                 padding:10
+            },
+            "& .MuiButton-root":{
+                width:"30%",
+                marginTop:10,
+                backgroundColor:"#020b2e",
+                color:"white",                
             }
             
         }
@@ -105,19 +112,20 @@ const LoginPage= () => {
     
     return (<>            
         <div className={classes.container}>
-           <form onSubmit={handleSubmit} >
-            <div style={{padding:15, textAlign:"center"}}>
-            {
-                tokenResponse.error && tokenResponse.error.data.code === 401 ? 
-                <span >Algo deu errado. Verifique as credenciais.</span>
-                : null
-            }
-            </div>
-            <TextField label="Conta" value={loginData.account} onChange={handleAccountChange} required/>
-            <TextField label="Login" onChange={handleUsernameChange} required/>
-            <TextField label="Senha"  type="password" onChange={handlePasswordChange} required/>    
-            <Button type="submit">ENTRAR</Button>
+            <form onSubmit={handleSubmit} >
+                <div style={{padding:15, textAlign:"center"}}>
+                {
+                    tokenResponse.error && tokenResponse.error.data.code === 401 ? 
+                    <span >Algo deu errado. Verifique as credenciais.</span>
+                    : null
+                }
+                </div>
+                <TextField label="Conta" value={loginData.account} onChange={handleAccountChange} required/>
+                <TextField label="Login" onChange={handleUsernameChange} required/>
+                <TextField label="Senha"  type="password" onChange={handlePasswordChange} required/>    
+                <Button variant="contained"  type="submit">ENTRAR</Button>
         </form>
+        
             
         </div>
         <Backdrop className={classes.backdrop} open={tokenResponse.loading === true}>
